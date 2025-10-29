@@ -1,24 +1,16 @@
-// Toggle state (on/off)
-let cssDisabled = false;
+const icon = "icon.png";
 
-// Icon paths for on/off state
-const iconOn = "iconOn.png";
-const iconOff = "icon.png";
+browser.browserAction.setIcon({ path: icon, tabId: tab.id });
 
-// Toggle CSS on/off for the current tab
-function toggleCSS(tab) {
-  cssDisabled = !cssDisabled;
-  browser.browserAction.setIcon({ path: cssDisabled ? iconOn : iconOff, tabId: tab.id });
+// Switch CSS off for the current tab
+function CSSoff(tab) {
+	browser.tabs.removeCSS(tab.id);
+	browser.browserSettings.overrideContentColorScheme.clear({});
 
-  if (cssDisabled) {
-    browser.browserSettings.overrideContentColorScheme.set({ value: "no-preference" });
-    browser.tabs.insertCSS(tab.id, { code: "body * { all: unset !important; }" });
-  } else {
-    browser.tabs.removeCSS(tab.id);
-    browser.browserSettings.overrideContentColorScheme.clear({});
-  }
+//	browser.browserSettings.overrideContentColorScheme.set({ value: "no-preference" });
+//    browser.tabs.insertCSS(tab.id, { code: "body * { all: unset !important; }" });
 }
 
 // Add click listener for the browser action button
-browser.browserAction.onClicked.addListener(toggleCSS);
+browser.browserAction.onClicked.addListener(CSSoff);
 
