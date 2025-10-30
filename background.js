@@ -1,16 +1,32 @@
-const icon = "icon.png";
-
-browser.browserAction.setIcon({ path: icon, tabId: tab.id });
-
-// Switch CSS off for the current tab
 function CSSoff(tab) {
-	browser.tabs.removeCSS(tab.id);
-	browser.browserSettings.overrideContentColorScheme.clear({});
-
-//	browser.browserSettings.overrideContentColorScheme.set({ value: "no-preference" });
-//    browser.tabs.insertCSS(tab.id, { code: "body * { all: unset !important; }" });
+  browser.tabs.insertCSS(tab.id, {
+    code: `
+      * {
+        all: initial !important;
+      }
+      a, a:visited, a:hover, a:active {
+        color: blue !important;
+        text-decoration: underline !important;
+      }
+      body {
+        display: block !important;
+        background: white !important;
+        color: black !important;
+        font-family: sans-serif !important;
+        font-size: medium !important;
+        line-height: 1.2 !important;
+        margin: 0 !important;
+        padding: 1em !important;
+      }
+      img {
+        max-width: 100% !important;
+        height: auto !important;
+      }
+    `,
+    runAt: "document_start"
+  });
 }
 
-// Add click listener for the browser action button
 browser.browserAction.onClicked.addListener(CSSoff);
+
 
